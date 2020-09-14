@@ -1,14 +1,13 @@
 {
-  "name": "css-parser",
+  "name": "react-native-style-parser",
   "version": "0.1.0",
   "description": "CLI transform css files to javascript object",
   "main": "index.js",
   "bin": {
-    "css-parser": "./.bin/css-parser.js"
+    "react-native-style-parser": "./.bin/css-parser.js"
   },
   "scripts": {
-    "test": "mocha ./test",
-    "css-parser": "node ./.bin/css-parser.js"
+    "test": "mocha ./test"
   },
   "repository": {
     "type": "git",
@@ -16,6 +15,8 @@
   },
   "bugs": "https://github.com/Orivoir/css-parser/issues",
   "keywords": [
+    "react",
+    "native",
     "CLI",
     "css",
     "parser",

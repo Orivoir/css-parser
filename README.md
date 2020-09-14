@@ -1,4 +1,4 @@
-# [css-parser](https://npmjs.com/package/css-parser)
+# [react-native-style-parser](https://npmjs.com/package/react-native-style-parser)
 
 > Command line interface transform css files to javascript object
 
@@ -19,17 +19,17 @@ now you can convert **css files** to **javascript object**.
 
 ## installation
 
-**css-parser** should be local install for any project,
-**css-parser** work only before prod you can install from *dev dependencies*
+**react-native-style-parser** should be local install for any project,
+**react-native-style-parser** work only before prod you can install from *dev dependencies*
 
 ```bash
-> npm install --save-dev css-parser
+> npm install --save-dev react-native-style-parser
 ```
 
 or with yarn
 
 ```bash
-> yard add css-parser -D
+> yard add react-native-style-parser -D
 ```
 
 ## config
@@ -39,7 +39,7 @@ After installation from you **package.json** you should add *script* for access 
 ```json
 {
   "scripts": {
-    "css-parser": "css-parser"
+    "react-native-style-parser": "react-native-style-parser"
   }
 }
 ```
@@ -47,13 +47,13 @@ After installation from you **package.json** you should add *script* for access 
 For check if access to command is right you can try show version with **--version** option
 
 ```bash
-> npm run css-parser -- --version
+> npm run react-native-style-parser -- --version
 ```
 
 # usage
 
 Usage of command line interface is easy and fast,
-**css-parser** convert class selector from you css files
+**react-native-style-parser** convert class selector from you css files
 as target to you javascript object.
 
 *e.g*
@@ -135,12 +135,12 @@ for transform a single file from **command line interface**
 you have need relative path of you css file.
 
 ```bash
-> npm run css-parser -- ./css/foobar.css to ./react-styles/
+> npm run react-native-style-parser -- ./css/foobar.css to ./react-styles/
 ```
 
 The path **./css/foobar.css** should be exists if the output folder
 
-not exists **css-parser** the create.
+not exists **react-native-style-parser** the create.
 
 After parse you should have **./react-styles/foobar.js** with you *javascript object styles*
 
@@ -150,10 +150,10 @@ You can easy transform all css files of a folder from **command line interface**
 you have need relative path of you folder.
 
 ```bash
-> npm run css-parser -- ./css/ to ./react-styles/
+> npm run react-native-style-parser -- ./css/ to ./react-styles/
 ```
 
-if you folder contains not css files **css-parser** auto skipping file.s
+if you folder contains not css files **react-native-style-parser** auto skipping file.s
 
 ### watch
 
@@ -164,7 +164,7 @@ add just **--watch** option
 below command line **watch** folder **./css/** and write inside **./react-styles/**
 
 ```bash
-> npm run css-parser -- ./css/ to ./react-styles/ --watch
+> npm run react-native-style-parser -- ./css/ to ./react-styles/ --watch
 ```
 
 ### es6
@@ -191,7 +191,7 @@ export default {
 below command line **watch** and generate **es6** export
 
 ```bash
-> npm run css-parser -- ./css/ to ./react-styles/ --es6 --watch
+> npm run react-native-style-parser -- ./css/ to ./react-styles/ --es6 --watch
 ```
 
 ### optimize
@@ -199,7 +199,7 @@ below command line **watch** and generate **es6** export
 After you phase develop you can generate a minimified styles for optimization run time
 
 ```bash
-> npm run css-parser -- ./css/ to ./react-styles/ --es6 --optimize
+> npm run react-native-style-parser -- ./css/ to ./react-styles/ --es6 --optimize
 ```
 
 ## more
@@ -207,15 +207,15 @@ After you phase develop you can generate a minimified styles for optimization ru
 During transform of grouped selectors *e.g*
 **.a, .b, .c**
 
-**css-parser** persist only the first selector ( **.a** ) and skip all other selectors
+**react-native-style-parser** persist only the first selector ( **.a** ) and skip all other selectors
 
 During transform of extends selectors *e.g*
 
 **.a .b .c**
 
-**css-parser** replace white space by *underscore* ( **_** ) and remove **dot** for persist unified name style ( **a_b_c** )
+**react-native-style-parser** replace white space by *underscore* ( **_** ) and remove **dot** for persist unified name style ( **a_b_c** )
 
-*if selector contains operator ( +, >, ~, ... ) **css-parser** persist integrity selector*
+*if selector contains operator ( +, >, ~, ... ) **react-native-style-parser** persist integrity selector*
 
 **.a + .b > .c** should transform **a_+_b_>_c**
 
