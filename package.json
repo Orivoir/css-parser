@@ -26,7 +26,7 @@
     "line"
   ],
   "author": "S.GABORIEAU <sam.gabor@hotmail.com> (https://github.com/Orivoir/)",
-  "license": "ISC",
+  "license": "BSD-2-CLAUSE",
   "dependencies": {
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2"
