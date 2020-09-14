@@ -1,0 +1,17 @@
+[
+  {
+    "push": ["abc", "def", "ijk"],
+    "args": ["abc", "def", "ijk"],
+    "options": []
+  },
+  {
+    "push": ["abc", "--def", "ijk"],
+    "args": ["abc", "ijk", "--def"],
+    "options": ["--def"]
+  },
+  {
+    "push": ["-abc", "/path/to/paradise", ""],
+    "args": ["-abc", "/path/to/paradise"],
+    "options": []
+  }
+]
