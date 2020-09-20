@@ -12,8 +12,25 @@ function persistDataType( value ) {
   return "'" + value + "'";
 }
 
+function styleWriteProperty( propertyName, isNoQuote ) {
 
-module.exports = function( {styles, path, isEs6, isOptimize} ) {
+  if( isNoQuote ) {
+
+    return propertyName;
+  } else {
+
+    return "'"+propertyName+"'";
+  }
+
+}
+
+module.exports = function( {
+  styles,
+  path,
+  isEs6,
+  isOptimize,
+  isNoQuote
+} ) {
 
   const exportType = isEs6 ? "export default": "module.exports =";
 
@@ -25,7 +42,8 @@ module.exports = function( {styles, path, isEs6, isOptimize} ) {
 
     Object.keys( styles[selector] ).forEach(propertyName => {
 
-      append += "\t\t'" + propertyName + "': " + persistDataType(styles[selector][propertyName]) +",\n"
+      append += `\t\t${styleWriteProperty( propertyName, isNoQuote )}: ${persistDataType(styles[selector][propertyName])},\n`;
+
     });
 
     append += "\t},\n";

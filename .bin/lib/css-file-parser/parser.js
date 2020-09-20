@@ -38,6 +38,99 @@ class CssFileParser {
     return CssFileParser;
   }
 
+  static get propertiesToMap() {
+
+    return [
+      "padding",
+      "margin",
+      "border"
+    ];
+
+  }
+
+  static isMapProperty( propertyName ) {
+
+    return CssFileParser.propertiesToMap.includes( propertyName );
+  }
+
+  static getMapOfProperty( propertyName ) {
+
+    return ({
+      "padding": {
+        "paddingTop": [0, {
+          type: "value",
+          value: 0
+        }],
+        "paddingBottom": [0, {
+          type: "value",
+          value: 0
+        }],
+        "paddingRight": [1, {
+          type: "index",
+          value: 0
+        }],
+        "paddingLeft": [1, {
+          type: "index",
+          value: 0
+        }]
+      },
+      "margin": {
+        "marginTop": [0, {
+          type: "value",
+          value: 0
+        }],
+        "marginBottom": [0, {
+          type: "value",
+          value: 0
+        }],
+        "marginRight": [1, {
+          type: "index",
+          value: 0
+        }],
+        "marginLeft": [1, {
+          type: "index",
+          value: 0
+        }]
+      },
+      "border": {
+        "borderStyle": [1, {
+          type: "value",
+          value: "solid"
+        }],
+        "borderWith": [0, {
+          type: "value",
+          value: 1
+        }],
+        "borderColor": [2, {
+          type: "value",
+          value: "#000"
+        }]
+      }
+    })[ propertyName ] || null;
+  }
+
+  static separeValues( values ) {
+
+    return values.trim().split(' ');
+  }
+
+  static transformValue( value ) {
+
+    if( /^[\d]{1,}(\.)?[\d]{0,}px/.test(value) ) {
+
+      return parseFloat( value );
+    } else {
+
+      return value;
+    }
+  }
+
+  write( property, value ) {
+
+    this.stylesheet[ this.selector ][ property ] = CssFileParser.transformValue(value);
+
+  }
+
   constructor( path ) {
 
     this.path = path;
@@ -70,7 +163,6 @@ class CssFileParser {
 
       if( this.body.indexOf( "@CssParser/Ignore" ) !== -1 ) return;
 
-
       this.selector = CssFileParser.normalizeSelector( this.selector, isValidSelector );
 
       this.body = CssFileParser.parseBody( this.body );
@@ -79,7 +171,49 @@ class CssFileParser {
 
       Object.keys( this.body ).forEach( cssValue => {
 
-        this.stylesheet[ this.selector ][ this.body[cssValue].property ] = this.body[cssValue].value;
+        const propertyName = this.body[cssValue].property;
+
+        if( CssFileParser.isMapProperty( propertyName ) ) {
+
+          const mapProperty = CssFileParser.getMapOfProperty( propertyName );
+
+          const valuesProperties =  CssFileParser.separeValues( this.body[cssValue].value );
+
+          Object.keys( mapProperty ).forEach( currentPropertyName => {
+
+            const indexValue = mapProperty[ currentPropertyName ][ 0 ];
+            const replyValue = mapProperty[ currentPropertyName ][ 1 ];
+
+            if( valuesProperties[ indexValue ] || valuesProperties[ indexValue ] === 0  ) {
+
+              this.write( currentPropertyName, valuesProperties[ indexValue ] );
+
+            } else {
+
+              if( replyValue.type === "value" ) {
+                this.write( currentPropertyName, replyValue.value );
+
+              } else {
+
+                if( valuesProperties[ replyValue.value ] || valuesProperties[ replyValue.value ] === 0 ) {
+
+                  this.write( currentPropertyName, valuesProperties[ replyValue.value ]);
+                } else {
+
+                  const realPropertyName = propertyName;
+
+                  console.log(`during map of property: "${realPropertyName}" from selector: "${this.selector}", the value for sub property: "${currentPropertyName}", have not been find.\nParse have been stopped, you should fix above error before re run parse style`);
+                  throw 'Oops, css value invalid.';
+                }
+              }
+            }
+
+         } );
+
+        } else {
+
+          this.write( this.body[cssValue].property, this.body[cssValue].value );
+        }
 
       } );
 

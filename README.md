@@ -5,6 +5,8 @@
 You want create a app [react-native](https://reactnative.dev/) but write you style inside **javascript object** is not you enjoy
 now you can convert **css files** to **javascript object**.
 
+![react-native-style-parser](./demo.png "Sample")
+
 - [installation](#installation)
 
 - [config](#config)
@@ -12,10 +14,12 @@ now you can convert **css files** to **javascript object**.
 - [usage](#usage)
   - [single file](#single-file)
   - [directory](#directory)
-  - [watch](#watch)
-  - [es6](#es6)
-  - [optimize](#optimize)
-- [more](#more)
+  - [options](#options)
+    - [watch](#watch)
+    - [es6](#es6)
+    - [no-quote](#no-quote)
+    - [optimize](#optimize)
+- [other](#other)
 
 ## installation
 
@@ -39,7 +43,7 @@ After installation from you **package.json** you should add *script* for access 
 ```json
 {
   "scripts": {
-    "react-native-style-parser": "react-native-style-parser"
+    "build-style": "react-native-style-parser"
   }
 }
 ```
@@ -47,69 +51,36 @@ After installation from you **package.json** you should add *script* for access 
 For check if access to command is right you can try show version with **--version** option
 
 ```bash
-> npm run react-native-style-parser -- --version
+> npm run build-style -- --version
 ```
 
 # usage
 
 Usage of command line interface is easy and fast,
-**react-native-style-parser** convert class selector from you css files
-as target to you javascript object.
-
-*e.g*
-
-foobar.css
-```css
-
-.container {
-
-  width: 80%;
-  margin: auto;
-  z-index: 3;
-}
-
-#footer {
-
-  padding: 12px;
-}
-
-```
-
-foobar.js
-```js
-export default {
-
-  "container": {
-
-    "width": "80%",
-    "margin": "auto",
-    "zIndex": 3
-  }
-}
-```
+**react-native-style-parser** convert class selectors from you css files.
 
 Only class selectors is transform,
-but if you want ignore a class selector you can define
-a annotation inside body style
+but if you want ignore a class selector you can add
+a annotation inside body style.
 
 *e.g*
-
 
 foobar.css
 ```css
 
 .container {
 
-  width: 80%;
-  margin: auto;
+  flex: 1;
+  margin: 3px 5px;
   z-index: 3;
 }
 
-.footer {
+.style-my-web-view {
   /**
   * @CssParser/Ignore
   */
-  padding: 12px;
+  width: 65%;
+  margin: auto;
 }
 ```
 
@@ -118,125 +89,90 @@ foobar.js
 export default {
 
   "container": {
-
-    "width": "80%",
-    "margin": "auto",
-    "zIndex": 3
+    flex: 1,
+    marginTop: 3,
+    marginBottom: 3,
+    marginLeft: 5,
+    marginRight: 5,
+    zIndex: 3
   }
 }
 ```
 
-Any block styles can be ignore with annotation **@CssParser/Ignore**
+Any block styles can be ignore with annotation: **@CssParser/Ignore**
 
 
 ### single file
 
-for transform a single file from **command line interface**
-you have need relative path of you css file.
+Transform a single file with **command line interface**
+with **relative path** of **css file**.
 
 ```bash
-> npm run react-native-style-parser -- ./css/foobar.css to ./react-styles/
+> npm run build-style -- ./css/foobar.css to ./react-styles/
 ```
 
-The path **./css/foobar.css** should be exists if the output folder
+If not exists `./react-styles/foobar.js` is auto append.
 
-not exists **react-native-style-parser** the create.
-
-After parse you should have **./react-styles/foobar.js** with you *javascript object styles*
+After below parse *javascript object styles* at: `./react-styles/foobar.js`
 
 ### directory
 
-You can easy transform all css files of a folder from **command line interface**
-you have need relative path of you folder.
+Can transform all css files from a folder with **command line interface**
 
 ```bash
-> npm run react-native-style-parser -- ./css/ to ./react-styles/
+> npm run build-style -- ./css/ to ./react-styles/
 ```
 
-if you folder contains not css files **react-native-style-parser** auto skipping file.s
+### options
 
-### watch
+Can add behavior with **options** use `--option-name`
 
-You can use a watcher integrate for auto parse after changin inside [directory](#directory) or a [single file](#single-file)
-add just **--watch** option
+#### watch
 
-
-below command line **watch** folder **./css/** and write inside **./react-styles/**
+Option **watch** allow auto parse after listen change inside a target file.
 
 ```bash
-> npm run react-native-style-parser -- ./css/ to ./react-styles/ --watch
+> npm run build-style -- ./css/ to ./react-styles/ --watch
 ```
 
-### es6
+#### es6
 
-With the default behavior command line interface generate a exports with
-nodejs syntaxe
+Option **watch** generate export with ES6 syntaxe.
 
-```js
-module.exports = {
-  // ...
-}
-```
-
-if you want use **es6** export you can add option **--es6**
-
-```js
-
-export default {
-  // ...
-}
-
-```
-
-below command line **watch** and generate **es6** export
+Default behavior generate a export with *nodejs syntaxe*
 
 ```bash
-> npm run react-native-style-parser -- ./css/ to ./react-styles/ --es6 --watch
+> npm run build-style -- ./css/ to ./react-styles/ --es6
 ```
 
-### optimize
+#### no-quote
 
-After you phase develop you can generate a minimified styles for optimization run time
+Option **no-quote** generate property name with no quote.
+Default behavior generaye single quote.
 
 ```bash
-> npm run react-native-style-parser -- ./css/ to ./react-styles/ --es6 --optimize
+> npm run build-style -- ./css/ to ./react-styles/ --no-quote
 ```
 
-## more
+#### optimize
 
-During transform of grouped selectors *e.g*
-**.a, .b, .c**
+Option **optimize** generate a minimified styles for optimization run time,
+use before switch prod env.
 
-**react-native-style-parser** persist only the first selector ( **.a** ) and skip all other selectors
-
-During transform of extends selectors *e.g*
-
-**.a .b .c**
-
-**react-native-style-parser** replace white space by *underscore* ( **_** ) and remove **dot** for persist unified name style ( **a_b_c** )
-
-*if selector contains operator ( +, >, ~, ... ) **react-native-style-parser** persist integrity selector*
-
-**.a + .b > .c** should transform **a_+_b_>_c**
-
-In next minor version a new annotation will added for allow you mannually rename output selector
-
-*e.g*
-
-```css
-.a + .b > .c {
-  /**
-  * @CssParser/Rename("a_b_c")
-  */
-
-  padding: 12px;
-}
+```bash
+> npm run build-style -- ./css/ to ./react-styles/ --optimize
 ```
+
+### other
+
+For not use *double dash option (--)* , prepare command from **package.json**
 
 ```json
-{
-  "a_b_c": {
-    "padding": "12px"
-  }
+"script": {
+  "build-style": "react-native-style-parser ./css to ./react-styles/ --es6 --no-quote --watch",
+  "build-style-prod": "react-native-style-parser ./css to ./react-styles/ --es6 --no-quote --optimize"
 }
 ```
+
+
+> The next minor version will add support for parsing [transform](https://reactnative.dev/docs/transforms#transform) property

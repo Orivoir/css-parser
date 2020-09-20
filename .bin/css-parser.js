@@ -27,6 +27,8 @@ const
 
   isOptimize = handlerArg.isExistsOptionByPattern( /optimize|min(imize)?|prod(uction)?/ ),
 
+  isNoQuote = handlerArg.isExistsOptionByPattern( /no(\-)?quote/ ),
+
   chokidar = require('chokidar'),
 
   _pkg = require('./../package.json')
@@ -129,7 +131,8 @@ function onParseFile( filename ) {
     styles: createStylesheet.stylesheet,
     path: pathWrite,
     isEs6,
-    isOptimize
+    isOptimize,
+    isNoQuote
   });
 
   prettyLogs.success(
