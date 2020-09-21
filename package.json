@@ -17,11 +17,12 @@
   "keywords": [
     "react",
     "native",
-    "CLI",
     "css",
     "parser",
-    "command",
+    "loader",
     "style",
+    "CLI",
+    "command",
     "interface",
     "transform",
     "line"

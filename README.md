@@ -23,8 +23,7 @@ now you can convert **css files** to **javascript object**.
 
 ## installation
 
-**react-native-style-parser** should be local install for any project,
-**react-native-style-parser** work only before prod you can install from *dev dependencies*
+Only local install is support.
 
 ```bash
 > npm install --save-dev react-native-style-parser
@@ -38,7 +37,7 @@ or with yarn
 
 ## config
 
-After installation from you **package.json** you should add *script* for access to command line
+After installation from **package.json** add key *script* for access to command line
 
 ```json
 {
@@ -48,7 +47,7 @@ After installation from you **package.json** you should add *script* for access 
 }
 ```
 
-For check if access to command is right you can try show version with **--version** option
+For check access to command try show version with **--version** option
 
 ```bash
 > npm run build-style -- --version
@@ -57,10 +56,10 @@ For check if access to command is right you can try show version with **--versio
 # usage
 
 Usage of command line interface is easy and fast,
-**react-native-style-parser** convert class selectors from you css files.
+**react-native-style-parser** convert `class` selectors from css files.
 
 Only class selectors is transform,
-but if you want ignore a class selector you can add
+but you can ignore a specific `class` selector with
 a annotation inside body style.
 
 *e.g*
@@ -75,7 +74,7 @@ foobar.css
   z-index: 3;
 }
 
-.style-my-web-view {
+.style-for-my-web-view {
   /**
   * @CssParser/Ignore
   */
@@ -176,3 +175,5 @@ For not use *double dash option (--)* , prepare command from **package.json**
 
 
 > The next minor version will add support for parsing [transform](https://reactnative.dev/docs/transforms#transform) property
+
+Please if you detect undetermined behavior open a [issue](https://github.com/Orivoir/css-parser/issues)
