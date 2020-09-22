@@ -1,0 +1,17 @@
+.btn-buy {
+
+  background-color: #eeee44;
+  opacity: .95;
+  font-size: 18px;
+}
+
+.btn-buy-web-view {
+  /**
+  * @CssParser/Ignore
+  */
+
+  background-color: #e5e5e5;
+  font-size: 35px;
+  margin: 25px 0px;
+  display: inline-block;
+}

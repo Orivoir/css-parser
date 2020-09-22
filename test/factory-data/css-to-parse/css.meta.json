@@ -1,0 +1,68 @@
+{
+  "files": [
+    {
+      "path": "./a.css",
+      "result": {
+        "container": {
+          "marginTop": 6,
+          "marginBottom": 6,
+          "marginLeft": 0,
+          "marginRight": 0
+        },
+        "title": {
+          "color": "#fff",
+          "fontSize": 28
+        }
+      },
+      "isExists": true,
+      "isSkip": false
+    },
+    {
+      "path": "./b.css",
+      "result": {
+        "btn-buy": {
+          "backgroundColor": "#eeee44",
+          "opacity": 0.95,
+          "fontSize": 18
+        }
+      },
+      "isExists": true,
+      "isSkip": false
+    },
+    {
+      "path": "./not-exists.min.css",
+      "isExists": false
+    },
+    {
+      "path": "./another.file.md",
+      "isExists": true,
+      "isSkip": true
+    },
+    {
+      "path": "./_foo-bar.min.css",
+      "result": {
+        "a": {
+          "color": "red",
+          "fontSize":25,
+          "zIndex":5
+        },
+        "b": {
+          "marginTop": 6,
+          "marginBottom": 6,
+          "marginLeft": 2,
+          "marginRight": 2,
+          "color": "green",
+          "fontSize":14,
+          "letterSpacing": 9
+        },
+        "c": {
+          "letterSpacing":12,
+          "color": "blue",
+          "zIndex":6
+        }
+      },
+      "isExists": true,
+      "isSkip": false
+    }
+  ]
+}

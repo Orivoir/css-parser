@@ -2,14 +2,13 @@ const fs = require('fs');
 
 function persistDataType( value ) {
 
-  const PATTERN_ONLY_NUMBER = /^[\d]{0,}(\.)?[\d]{1,254}$/;
+  if( typeof value === "string" ) {
 
-  if( PATTERN_ONLY_NUMBER.test( value ) || value.indexOf('"') !== -1 ) {
+    return "'"+value+"'";
+  } else {
 
     return value;
   }
-
-  return "'" + value + "'";
 }
 
 function styleWriteProperty( propertyName, isNoQuote ) {

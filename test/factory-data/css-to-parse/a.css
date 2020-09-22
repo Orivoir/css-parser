@@ -1,0 +1,11 @@
+.container {
+
+  margin: 6px 0;
+  background: rgb( 42,42,42 );
+}
+
+.title {
+
+  color: #fff;
+  font-size: 28px;
+}

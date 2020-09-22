@@ -1,4 +1,5 @@
 const fs = require('fs');
+const pathResolver = require('path');
 
 const CssUnminifier = require('./unminifier');
 const CssSepareBlock = require('./separe-block');
@@ -59,6 +60,11 @@ class CssFileParser {
     return /^[\d]{1,}(\.)?[\d]{0,}px/;
   }
 
+  static get PATTERN_ONLY_NUMBER() {
+
+    return /^[\d]{0,}(\.)?[\d]{1,254}$/;
+  }
+
   static isMapProperty( propertyName ) {
 
     return CssFileParser.propertiesToMap.includes( propertyName );
@@ -79,6 +85,10 @@ class CssFileParser {
     if( CssFileParser.PATTERN_IS_PX_VALUE.test(value) ) {
 
       return parseFloat( value );
+    } else if( CssFileParser.PATTERN_ONLY_NUMBER.test( value ) ) {
+
+      return parseFloat( value );
+
     } else {
 
       return value;
@@ -101,6 +111,11 @@ class CssFileParser {
         encoding: "utf-8"
       }
     );
+
+    if( !this.isValidExtension ) {
+      // file have been skip because file extension should be "css"
+      return;
+    }
 
     this.unminifier = new CssUnminifier( this.content );
     this.separeBlock = new CssSepareBlock( this.unminifier.content );
@@ -290,6 +305,13 @@ class CssFileParser {
     ) {
       throw new RangeError('constructor error, arg1: path, should be a path string value and should exists');
     }
+
+    const filename = pathResolver.basename( path );
+
+    const ext = filename.split('.').slice( -1 )[0].toLocaleLowerCase();
+
+
+    this.isValidExtension =  ( ext === "css" ) ;
 
     const scan = fs.statSync( path );
 
