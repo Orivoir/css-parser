@@ -34,7 +34,7 @@ class ReaderAnnotations {
     this.currentMultilineKey = null;
 
     this.data = {
-        excludes: []
+      excludes: []
     };
 
     this.resolveLines();

@@ -7,7 +7,7 @@ function addFileWatcher( filename ) {
 
   watcherFile.on('change', (path, stat) => {
 
-    prettyLogs.info(`listen rewrite ${path} with size of: ${stat.size} octets` );
+    // prettyLogs.info(`listen rewrite ${path} with size of: ${stat.size} octets` );
 
     onParseFile( path );
 
