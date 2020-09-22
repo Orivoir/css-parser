@@ -1,1 +1,4 @@
 /test/
+
+# result coverage test
+/.nyc_output/
