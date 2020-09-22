@@ -28,11 +28,6 @@ class CssFileParser {
     return CssFileParser;
   }
 
-  static get PROPERTIES_MAP_JSON() {
-
-    return require('./properties-map.meta.json');
-  }
-
   static addAllowSelector( allowSelector ) {
 
     if( typeof allowSelector === "string" ) {
@@ -43,6 +38,11 @@ class CssFileParser {
     return CssFileParser;
   }
 
+  static get PROPERTIES_MAP_JSON() {
+
+    return require('./properties-map.meta.json');
+  }
+
   static get propertiesToMap() {
 
     return [
@@ -51,6 +51,11 @@ class CssFileParser {
       "border"
     ];
 
+  }
+
+  static get PATTERN_IS_PX_VALUE() {
+
+    return /^[\d]{1,}(\.)?[\d]{0,}px/;
   }
 
   static isMapProperty( propertyName ) {
@@ -70,7 +75,7 @@ class CssFileParser {
 
   static transformValue( value ) {
 
-    if( /^[\d]{1,}(\.)?[\d]{0,}px/.test(value) ) {
+    if( CssFileParser.PATTERN_IS_PX_VALUE.test(value) ) {
 
       return parseFloat( value );
     } else {
@@ -101,8 +106,10 @@ class CssFileParser {
 
     this.stylesheet = {};
 
+    // loop css blocks
     this.separeBlock.blocks.forEach( block => {
 
+      // get selector of current css block
       this.selector = CssFileParser.separeSelector(
         this.separeBlock.getSelectorBlock( block )
       )[0];
@@ -111,48 +118,61 @@ class CssFileParser {
         this.selector.indexOf( allowSelector ) === 0
       ));
 
+      // extract properties of current css block
       this.body = this.separeBlock.getBodyBlock( block );
 
-      if( !isValidSelector ) return;
+      if( !isValidSelector ) {
+        // current css block have been aborted
+        // the selector can be valid but not allowed from: CssFileParser.ALLOWS_SELECTORS | string[]
+        return;
+      }
 
       if( this.body.indexOf( "@CssParser/Ignore" ) !== -1 ) return;
 
       this.selector = CssFileParser.normalizeSelector( this.selector, isValidSelector );
 
+      // parse body of current css block
       this.body = CssFileParser.parseBody( this.body );
 
       this.stylesheet[ this.selector ] = {};
 
+      // loop css properties of current css block
       Object.keys( this.body ).forEach( cssValue => {
 
         const propertyName = this.body[cssValue].property;
 
+        // if current property should be mapped
         if( CssFileParser.isMapProperty( propertyName ) ) {
 
           const mapProperty = CssFileParser.getMapOfProperty( propertyName );
 
           const valuesProperties =  CssFileParser.separeValues( this.body[cssValue].value );
 
+          // loop maps of current property
           Object.keys( mapProperty ).forEach( currentPropertyName => {
 
             const indexValue = mapProperty[ currentPropertyName ][ 0 ];
             const replyValue = mapProperty[ currentPropertyName ][ 1 ];
 
+            // if value is explicit define
             if( valuesProperties[ indexValue ] || valuesProperties[ indexValue ] === 0  ) {
 
               this.write( currentPropertyName, valuesProperties[ indexValue ] );
 
             } else {
 
+              // check if default value exists
+
               if( replyValue.type === "value" ) {
                 this.write( currentPropertyName, replyValue.value );
-
               } else {
 
                 if( valuesProperties[ replyValue.value ] || valuesProperties[ replyValue.value ] === 0 ) {
 
                   this.write( currentPropertyName, valuesProperties[ replyValue.value ]);
                 } else {
+
+                  // default value not exists for current map property
 
                   const realPropertyName = propertyName;
 
@@ -162,7 +182,7 @@ class CssFileParser {
               }
             }
 
-         } );
+          } );
 
         } else {
 
