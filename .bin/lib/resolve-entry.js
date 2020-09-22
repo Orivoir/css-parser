@@ -41,8 +41,6 @@ class ResolverEntry {
     if( typeof allowTypeFile === "string" ) {
 
       ResolverEntry.ALLOWS_TYPE_FILES.push( allowTypeFile );
-    
-    
     }
 
     return ResolverEntry;

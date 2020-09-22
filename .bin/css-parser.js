@@ -9,29 +9,20 @@ const
     }
   } ),
   fs = require('fs'),
-  pathResolver = require('path'),
-
-  CssFileParser = require('./lib/css-file-parser/parser'),
-
   ResolveEntry = require('./lib/resolve-entry'),
-
+  onParseFile = require('./lib/onParse'),
+  createWatcherParse = require('./lib/onWatchParse'),
   resolverEntryPath = new ResolveEntry,
-
   normalizePath = require('./lib/normalize-path'),
-
+  checkPathEntry = require('./lib/check-path-entry')
   styleWriting = require('./lib/style-writing'),
-
   prettyLogs = require('./lib/logs'),
+  _pkg = require('./../package.json'),
+
   isWatch = handlerArg.isExistsOption('watch'),
   isEs6 = handlerArg.isExistsOption('es6'),
-
   isOptimize = handlerArg.isExistsOptionByPattern( /optimize|min(imize)?|prod(uction)?/ ),
-
-  isNoQuote = handlerArg.isExistsOptionByPattern( /no(\-)?quote/ ),
-
-  chokidar = require('chokidar'),
-
-  _pkg = require('./../package.json')
+  isNoQuote = handlerArg.isExistsOptionByPattern( /no(\-)?quote/ )
 ;
 
 if( handlerArg.isExistsArg('version') || handlerArg.isExistsOption('version') ) {
@@ -51,16 +42,25 @@ ResolveEntry
 global.pathEntry = handlerArg.getArgByPosition( 0 );
 global.pathOutput = handlerArg.getArgByPosition( 2 );
 
+global.options = {
+  isWatch,
+  isEs6,
+  isOptimize,
+  isNoQuote
+};
+
+global.prettyLogs = prettyLogs;
+
 // if paths arg exists
-if( !global.pathEntry || !global.pathOutput ) {
+const statusCheckPathEntry = checkPathEntry();
 
-  const isExistsPathEntry = !!global.pathEntry;
-  const isExistsPathOutput = !!global.pathOutput;
+if( !statusCheckPathEntry.success ) {
 
-  const message = {
-    entry: "path entry not found\npath entry should be arg1\n",
-    output: "path output not found\npath output should be arg2"
-  };
+  const {
+    isExistsPathEntry,
+    isExistsPathOutput,
+    message
+  } = statusCheckPathEntry;
 
   prettyLogs.error(
     `${!isExistsPathEntry ? message.entry: ""}${!isExistsPathOutput ? message.output: ""}\n\ne.g > ${prettyLogs.string(global.pathEntry || "./css/index.css")} to ${prettyLogs.string(global.pathOutput || "./dist/index.js")}`
@@ -85,7 +85,6 @@ const isExistsEntry = fs.existsSync( global.pathEntry );
 if( !isExistsEntry ) {
 
   prettyLogs.error( "path entry: " +  prettyLogs.string( pathEntry ) + " not exists" );
-
   process.exit( 0 );
 }
 
@@ -113,49 +112,17 @@ console.log( prettyLogs.string( global.pathEntry ) + " > " + prettyLogs.string( 
 
 const filesname = resolverEntryPath.response.isDirectory ? resolverEntryPath.response.files.map( filename => (
   resolverEntryPath.response.join( filename )
-) ) : [global.pathEntry];
+) ): [global.pathEntry];
 
 prettyLogs.info(`${filesname.length} file.s have been find.s\n`);
 
-
-function onParseFile( filename ) {
-
-  const createStylesheet = new CssFileParser( filename );
-
-  const pathWrite = pathResolver.join(
-    global.pathOutput,
-    pathResolver.basename(filename).replace( 'css', 'js' )
-  );
-
-  styleWriting({
-    styles: createStylesheet.stylesheet,
-    path: pathWrite,
-    isEs6,
-    isOptimize,
-    isNoQuote
-  });
-
-  prettyLogs.success(
-    `${pathResolver.basename(filename)} => ${pathWrite}`
-  );
-
-}
-
 if( isWatch ) {
 
-  filesname.forEach( filename => {
-
-    const watcher = chokidar.watch( filename );
-
-    watcher.on('change', (path, stat) => {
-
-      prettyLogs.info(`listen rewrite ${path} with size of ${stat.size} octet` )
-
-      onParseFile( path );
-
-    } );
-
+  const onWatchParseFile = createWatcherParse( {
+    isDirectory: resolverEntryPath.response.isDirectory
   } );
+
+  filesname.forEach( onWatchParseFile );
 
 } else {
 

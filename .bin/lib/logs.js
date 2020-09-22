@@ -5,7 +5,7 @@ module.exports = {
   error: message => {
 
     console.log(
-      chalk`{bold.red Oops} ${message}`
+      chalk`{bold.red [error]} ${message}`
     );
 
   },
@@ -17,14 +17,14 @@ module.exports = {
   info: message => {
 
     console.log(
-      chalk`{bold.cyan helper} ${message}`
+      chalk`{bold.cyan [helper]} ${message}`
     );
   },
 
   success: message => {
 
     console.log(
-      chalk`{bold.green Success} ${message}`
+      chalk`{bold.green [success]} ${message}`
     );
   }
 
