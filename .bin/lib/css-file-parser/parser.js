@@ -28,6 +28,11 @@ class CssFileParser {
     return CssFileParser;
   }
 
+  static get PROPERTIES_MAP_JSON() {
+
+    return require('./properties-map.meta.json');
+  }
+
   static addAllowSelector( allowSelector ) {
 
     if( typeof allowSelector === "string" ) {
@@ -55,58 +60,7 @@ class CssFileParser {
 
   static getMapOfProperty( propertyName ) {
 
-    return ({
-      "padding": {
-        "paddingTop": [0, {
-          type: "value",
-          value: 0
-        }],
-        "paddingBottom": [0, {
-          type: "value",
-          value: 0
-        }],
-        "paddingRight": [1, {
-          type: "index",
-          value: 0
-        }],
-        "paddingLeft": [1, {
-          type: "index",
-          value: 0
-        }]
-      },
-      "margin": {
-        "marginTop": [0, {
-          type: "value",
-          value: 0
-        }],
-        "marginBottom": [0, {
-          type: "value",
-          value: 0
-        }],
-        "marginRight": [1, {
-          type: "index",
-          value: 0
-        }],
-        "marginLeft": [1, {
-          type: "index",
-          value: 0
-        }]
-      },
-      "border": {
-        "borderStyle": [1, {
-          type: "value",
-          value: "solid"
-        }],
-        "borderWith": [0, {
-          type: "value",
-          value: 1
-        }],
-        "borderColor": [2, {
-          type: "value",
-          value: "#000"
-        }]
-      }
-    })[ propertyName ] || null;
+    return CssFileParser.PROPERTIES_MAP_JSON[ propertyName ] || null;
   }
 
   static separeValues( values ) {
