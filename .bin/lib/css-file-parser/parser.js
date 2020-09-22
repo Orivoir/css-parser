@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const CssUnminifier = require('./unminifier');
 const CssSepareBlock = require('./separe-block');
+const CssAnnotations = require('./annotations');
 
 /**
  * transform css file to Javascript object
@@ -103,6 +104,7 @@ class CssFileParser {
 
     this.unminifier = new CssUnminifier( this.content );
     this.separeBlock = new CssSepareBlock( this.unminifier.content );
+    this.annotations = new CssAnnotations;
 
     this.stylesheet = {};
 
@@ -127,7 +129,13 @@ class CssFileParser {
         return;
       }
 
-      if( this.body.indexOf( "@CssParser/Ignore" ) !== -1 ) return;
+      const annotation = CssAnnotations.has( this.body );
+
+      if( annotation === CssAnnotations.IGNORE ) {
+        // current css block have been aborted
+        // because user have explicit ask from a annotation
+        return;
+      }
 
       this.selector = CssFileParser.normalizeSelector( this.selector, isValidSelector );
 
