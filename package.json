@@ -1,6 +1,6 @@
 {
   "name": "react-native-style-parser",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "CLI transform css files to javascript object",
   "main": "index.js",
   "bin": {
@@ -17,14 +17,14 @@
   "keywords": [
     "react",
     "native",
-    "css",
-    "parser",
-    "loader",
     "style",
-    "CLI",
+    "loader",
+    "parser",
+    "css",
     "command",
-    "interface",
     "transform",
+    "CLI",
+    "interface",
     "line"
   ],
   "author": "S.GABORIEAU <sam.gabor@hotmail.com> (https://github.com/Orivoir/)",
