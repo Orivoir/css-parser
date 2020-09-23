@@ -21,6 +21,9 @@ now you can convert **css files** to **javascript object**.
     - [es6](#es6)
     - [no-quote](#no-quote)
     - [optimize](#optimize)
+  - [annotations](#annotations)
+    - [ignore](#ignore)
+    - [compose](#compose)
 - [other](#other)
 
 ## installation
@@ -59,46 +62,6 @@ For check access to command try show version with **--version** option
 
 Usage of command line interface is easy and fast,
 **react-native-style-parser** convert `class` selectors from css files.
-
-Only class selectors is transform,
-but you can ignore a specific `class` selector with
-a annotation inside body style.
-
-*e.g*
-
-foobar.css
-```css
-
-.container {
-
-  flex: 1;
-  margin: 3px 5px;
-  z-index: 3;
-}
-
-.style-for-my-web-view {
-  /**
-  * @CssParser/Ignore
-  */
-  width: 65%;
-  margin: auto;
-}
-```
-
-foobar.js
-```js
-export default {
-
-  "container": {
-    flex: 1,
-    marginTop: 3,
-    marginBottom: 3,
-    marginLeft: 5,
-    marginRight: 5,
-    zIndex: 3
-  }
-}
-```
 
 Any block styles can be ignore with annotation: **@CssParser/Ignore**
 
@@ -162,6 +125,93 @@ use before switch prod env.
 
 ```bash
 > npm run build-style -- ./css/ to ./react-styles/ --optimize
+```
+
+### annotations
+
+Add behavior from pretty annotations
+
+#### ignore
+
+Skip specific css block
+
+```css
+
+.container {
+
+  flex: 1;
+  margin: 3px 5px;
+  z-index: 3;
+}
+
+.container-web-view {
+  /**
+  * @CssParser/Ignore()
+  */
+  width: 65%;
+  margin: auto;
+}
+```
+
+```js
+export default {
+
+  "container": {
+    flex: 1,
+    marginTop: 3,
+    marginBottom: 3,
+    marginLeft: 5,
+    marginRight: 5,
+    zIndex: 3
+  }
+}
+```
+
+#### compose
+
+Annotations **compose** is a approach of [react-native compose](https://reactnative.dev/docs/stylesheet#compose)
+
+```css
+
+.text {
+
+  color: rgb( 42,42,42 );
+}
+
+.title {
+  font-size: 25px;
+  letter-spacing: 9px;
+}
+
+.super-text {
+  /**
+  * @CssParser/Compose( "text", "title" )
+  */
+
+  cursor: pointer;
+}
+
+
+```
+
+```js
+export default {
+  "text": {
+    color: "rgb( 42,42,42 )"
+  },
+
+  "title": {
+    fontSize: 25,
+    letterSpacing: 9
+  },
+
+  "super-text": {
+    color: "rgb( 42,42,42 )",
+    fontSize: 25,
+    letterSpacing: 9,
+    cursor: pointer
+  }
+}
 ```
 
 ### other
