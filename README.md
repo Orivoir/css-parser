@@ -63,9 +63,6 @@ For check access to command try show version with **--version** option
 Usage of command line interface is easy and fast,
 **react-native-style-parser** convert `class` selectors from css files.
 
-Any block styles can be ignore with annotation: **@CssParser/Ignore**
-
-
 ### single file
 
 Transform a single file with **command line interface**

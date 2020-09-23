@@ -16,10 +16,13 @@ class ReaderAnnotations {
 
   constructor(
     lines,
-    classname
+    classname,
+    persistExcludes=true
   ) {
 
     this.lines = lines.slice( 1, -1 );
+
+    this.persistExcludes = !!persistExcludes;
 
     this.worker = null;
     this.classname = classname;
@@ -33,13 +36,18 @@ class ReaderAnnotations {
     this.isMultiLine = false;
     this.currentMultilineKey = null;
 
-    this.data = {
-      excludes: []
-    };
+    this.data = {};
+
+    if( this.persistExcludes ) {
+      this.data.excludes = [];
+    }
 
     this.resolveLines();
 
-    this.data.excludes = this.data.excludes.filter( exclude => !!exclude.length );
+    if( this.persistExcludes ) {
+
+      this.data.excludes = this.data.excludes.filter( exclude => !!exclude.length );
+    }
 
     this.cleanOutput();
   }
@@ -71,9 +79,11 @@ class ReaderAnnotations {
           }
 
       } else {
-        // ecludes value
+        // excludes value
         // this line is an brut commentary
-        this.data.excludes.push( this.worker );
+        if( this.persistExcludes ) {
+          this.data.excludes.push( this.worker );
+        }
       }
 
     } );
@@ -175,7 +185,7 @@ class ReaderAnnotations {
 
     // persist only final data
 
-    if( !this.data.excludes.length ) {
+    if( this.data.excludes && !this.data.excludes.length ) {
 
       delete this.data.excludes;
     }
