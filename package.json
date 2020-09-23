@@ -7,7 +7,8 @@
     "react-native-style-parser": "./.bin/css-parser.js"
   },
   "scripts": {
-    "test": "mocha ./test"
+    "test": "mocha ./test",
+    "coverage": "nyc npm test"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.1.3"
+    "mocha": "^8.1.3",
+    "nyc": "^15.1.0"
   }
 }

@@ -1,5 +1,7 @@
 # [react-native-style-parser](https://npmjs.com/package/react-native-style-parser)
 
+![node CI](https://github.com/Orivoir/css-parser/workflows/node%20CI/badge.svg?branch=workflow)
+
 > Command line interface transform css files to javascript object
 
 You want create a app [react-native](https://reactnative.dev/) but write you style inside **javascript object** is not you enjoy

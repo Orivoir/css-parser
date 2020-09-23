@@ -4,6 +4,7 @@ const pathResolver = require('path');
 const CssUnminifier = require('./unminifier');
 const CssSepareBlock = require('./separe-block');
 const CssAnnotations = require('./annotations');
+const CssComposer = require('./composer');
 
 /**
  * transform css file to Javascript object
@@ -119,7 +120,7 @@ class CssFileParser {
 
     this.unminifier = new CssUnminifier( this.content );
     this.separeBlock = new CssSepareBlock( this.unminifier.content );
-    this.annotations = new CssAnnotations;
+    this.composer = new CssComposer;
 
     this.stylesheet = {};
 
@@ -144,15 +145,31 @@ class CssFileParser {
         return;
       }
 
-      const annotation = CssAnnotations.has( this.body );
-
-      if( annotation === CssAnnotations.IGNORE ) {
-        // current css block have been aborted
-        // because user have explicit ask from a annotation
-        return;
-      }
-
       this.selector = CssFileParser.normalizeSelector( this.selector, isValidSelector );
+
+      const annotations = CssAnnotations.getAnnotations( this.body );
+
+      if( annotations.has() ) {
+        // current css block contains one or many annotations
+
+        if( annotations.contains( CssAnnotations.IGNORE ) ) {
+          // current css block have been aborted
+          // because user have explicit ask from a annotation
+          return;
+        }
+
+        const composeAnnotation = annotations.contains( CssAnnotations.COMPOSE );
+
+        if( composeAnnotation ) {
+
+          this.composer.add({
+            selector: this.selector,
+            composes: composeAnnotation.valueParsed
+          });
+
+        }
+
+      }
 
       // parse body of current css block
       this.body = CssFileParser.parseBody( this.body );
@@ -213,6 +230,8 @@ class CssFileParser {
         }
 
       } );
+
+      this.stylesheet = this.composer.generate( this.stylesheet );
 
     });
 

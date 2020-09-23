@@ -1,32 +1,79 @@
+const ReaderAnnotations = require('./../reader-annotations');
+
 class CssAnnotations {
+
+  /**
+   *
+   * @param {string} cssBody - complet css block
+   * @return array|Annotation - annotations read from css block
+   */
+  static getAnnotations( cssBody ) {
+
+    const ra = CssAnnotations.read( cssBody );
+
+    const annotations = [];
+
+    annotations.contains = CssAnnotations.contains.bind( annotations );
+    annotations.has = CssAnnotations.has.bind( annotations );
+
+    if( typeof ra.data === "object" ) {
+
+      Object.keys( ra.data ).forEach( annotationName => {
+
+        annotations.push({
+          name: annotationName,
+          value: ra.data[annotationName].valueBrut,
+          valueParsed: ra.data[annotationName].value
+        });
+
+      } );
+
+    }
+
+    return annotations;
+  }
+
+  static read( bodyCss ) {
+
+    const ra = new ReaderAnnotations(
+      bodyCss.split('\n'),
+      "css file"
+    );
+
+    return ra;
+  }
 
   static get IGNORE() {
 
-    return "@CssParser/Ignore";
+    return "CssParser/Ignore";
   }
 
-  /**
-   * @return string[] - get list of annotations cant contains var.s
-   */
-  static get STATIC() {
+  static get COMPOSE() {
 
-    return [
-      {
-        name: CssAnnotations.IGNORE,
-        describe: "define inside body css block ignore this css block"
-      }
-    ];
+    return "CssParser/Compose"
   }
 
-  static has( cssBody ) {
+  static has() {
 
-    const hasStatic = CssAnnotations.STATIC.find( staticAnnotation => {
+    const annotations = this;
 
-      return cssBody.indexOf( staticAnnotation.name ) !== -1;
+    if( !annotations )
+      return false;
 
-    } );
+    return annotations.length > 0;
+  }
 
-    return typeof hasStatic === "object" ? hasStatic.name: null;
+  static contains( annotationName ) {
+
+    const annotations = this;
+
+    if( !annotations ) {
+      return false;
+    }
+
+    return annotations.find( annotation => (
+      annotation.name === annotationName
+    ) );
 
   }
 
