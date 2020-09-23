@@ -237,6 +237,12 @@ class CssFileParser {
 
   }
 
+  /*
+   * this method is generic to convert dash value to string value
+   * this method should be export to a Utils class or a module fonction
+   *
+   *  @see ./.bin/lib/resolve-config.js
+   */
   static transformPropertyName( propertyName ) {
 
     if( propertyName.indexOf('-') === -1 ) return propertyName;

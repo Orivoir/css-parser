@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 const
+  _pkg = require('./../package.json'),
   CliArg = require('./lib/args'),
   handlerArg = new CliArg( {
     preNormalize: function( args ) {
@@ -9,88 +10,38 @@ const
     }
   } ),
   fs = require('fs'),
-  ResolveEntry = require('./lib/resolve-entry'),
   onParseFile = require('./lib/onParse'),
   createWatcherParse = require('./lib/onWatchParse'),
-  resolverEntryPath = new ResolveEntry,
-  normalizePath = require('./lib/normalize-path'),
-  checkPathEntry = require('./lib/check-path-entry')
-  styleWriting = require('./lib/style-writing'),
   prettyLogs = require('./lib/logs'),
-  _pkg = require('./../package.json'),
 
-  isWatch = handlerArg.isExistsOption('watch'),
-  isEs6 = handlerArg.isExistsOption('es6'),
-  isOptimize = handlerArg.isExistsOptionByPattern( /optimize|min(imize)?|prod(uction)?/ ),
-  isNoQuote = handlerArg.isExistsOptionByPattern( /no(\-)?quote/ )
+  ConfigResolver = require('./lib/resolve-config'),
+  config = new ConfigResolver( handlerArg )
 ;
+
+global.options = config.options;
+global.paths = config.paths;
 
 if( handlerArg.isExistsArg('version') || handlerArg.isExistsOption('version') ) {
 
   prettyLogs.info('version: ' + _pkg.version );
-
 	process.exit();
 }
 
-ResolveEntry
-  .setAllowsTypeFiles([
-    "css"
-  ])
-  .setIsAllowDirectory( true )
-;
-
-global.pathEntry = handlerArg.getArgByPosition( 0 );
-global.pathOutput = handlerArg.getArgByPosition( 2 );
-
-global.options = {
-  isWatch,
-  isEs6,
-  isOptimize,
-  isNoQuote
-};
-
 global.prettyLogs = prettyLogs;
 
-// if paths arg exists
-const statusCheckPathEntry = checkPathEntry();
-
-if( !statusCheckPathEntry.success ) {
-
-  const {
-    isExistsPathEntry,
-    isExistsPathOutput,
-    message
-  } = statusCheckPathEntry;
-
-  prettyLogs.error(
-    `${!isExistsPathEntry ? message.entry: ""}${!isExistsPathOutput ? message.output: ""}\n\ne.g > ${prettyLogs.string(global.pathEntry || "./css/index.css")} to ${prettyLogs.string(global.pathOutput || "./dist/index.js")}`
-  );
-
-  process.exit( 0 );
-}
-
-// normalize paths arg
-global.pathEntry = normalizePath({
-  root: process.cwd(),
-  path: global.pathEntry
-});
-
-global.pathOutput = normalizePath({
-  root: process.cwd(),
-  path: global.pathOutput
-});
-
-const isExistsEntry = fs.existsSync( global.pathEntry );
+const isExistsEntry = fs.existsSync( config.paths.entry );
 
 if( !isExistsEntry ) {
 
-  prettyLogs.error( "path entry: " +  prettyLogs.string( pathEntry ) + " not exists" );
+  prettyLogs.error( "path entry: " +  prettyLogs.string( config.paths.entry ) + " not exists" );
   process.exit( 0 );
 }
 
-resolverEntryPath.path = global.pathEntry;
+const resolverEntryPath = config.resolverEntryPath;
 
-if( isWatch ) {
+resolverEntryPath.path = config.paths.entry;
+
+if( config.options.isWatch ) {
 
   prettyLogs.info( "mode watch have been enabled\n" );
 }
@@ -98,25 +49,28 @@ if( isWatch ) {
 if( !resolverEntryPath.response.success ) {
 
   prettyLogs.error( resolverEntryPath.response.details );
-
   process.exit();
 }
 
-if( !fs.existsSync( global.pathOutput ) ) {
-  fs.mkdirSync( global.pathOutput, {
+// create directory output if not exists
+if( !fs.existsSync( config.paths.output ) ) {
+
+  fs.mkdirSync( config.paths.output, {
     recursive: true
   } );
+
 }
 
-console.log( prettyLogs.string( global.pathEntry ) + " > " + prettyLogs.string( global.pathOutput ) + "\n" );
+console.log( prettyLogs.string( config.paths.entry ) + " > " + prettyLogs.string( config.paths.output ) + "\n" );
 
+// get files to parses
 const filesname = resolverEntryPath.response.isDirectory ? resolverEntryPath.response.files.map( filename => (
   resolverEntryPath.response.join( filename )
-) ): [global.pathEntry];
+) ): [config.paths.entry];
 
 prettyLogs.info(`${filesname.length} file.s have been find.s\n`);
 
-if( isWatch ) {
+if( config.options.isWatch ) {
 
   const onWatchParseFile = createWatcherParse( {
     isDirectory: resolverEntryPath.response.isDirectory
@@ -127,5 +81,4 @@ if( isWatch ) {
 } else {
 
   filesname.forEach( onParseFile );
-
 }
