@@ -1,0 +1,36 @@
+{
+  "functionals": [
+    {
+      "entry": "foo-bar",
+      "output": "fooBar"
+    },
+    {
+      "entry": "abc-def_abc",
+      "output": "abcDef_abc"
+    },
+    {
+      "entry": "acb--def",
+      "output": "acbDef"
+    },
+    {
+      "entry": "a_a-a_a__foobar--abcde-f-a",
+      "output": "a_aA_a__foobarAbcdeFA"
+    },
+    {
+      "entry": "a-b",
+      "output": "aB"
+    },
+    {
+      "entry": "-abc-",
+      "output": "Abc"
+    }
+  ],
+
+  "throws": [
+    null,
+    42,
+    false,
+    true
+  ]
+
+}

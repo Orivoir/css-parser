@@ -1,11 +1,6 @@
 const ResolveEntry = require('./resolve-entry');
 const normalizePath = require('./normalize-path');
-
-/**
- * CssFileParser is import for transform dash string value to camel case string value from
- * static method `transformPropertyName`
- */
-const CssFileParser = require('./css-file-parser/parser');
+const dash2camel = require('./dash2camel');
 
 const fs = require('fs');
 const pathResolver = require('path');
@@ -164,7 +159,7 @@ class ConfigResolver {
         newOptionsName =  "is" + ( optionName.charAt( 0 ).toLocaleUpperCase() + optionName.slice( 1, ) );
       }
 
-      newOptionsName = CssFileParser.transformPropertyName(newOptionsName);
+      newOptionsName = dash2camel(newOptionsName);
 
       optionsBuild[ newOptionsName ] = options[ optionName ];
 
