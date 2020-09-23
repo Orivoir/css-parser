@@ -4,8 +4,8 @@
 
 > Command line interface transform css files to javascript object
 
-You want create a app [react-native](https://reactnative.dev/) but write you style inside **javascript object** is not you enjoy
-now you can convert **css files** to **javascript object**.
+You want create a app [react-native](https://reactnative.dev/) but write you style inside **javascript object** is not you enjoy ?
+Now you can convert **css files** to **javascript object**.
 
 ![react-native-style-parser](./demo.png "Sample")
 
@@ -221,8 +221,5 @@ For not use *double dash option (--)* , prepare command from **package.json**
   "build-style-prod": "react-native-style-parser ./css to ./react-styles/ --es6 --no-quote --optimize"
 }
 ```
-
-
-> The next minor version will add support for parsing [transform](https://reactnative.dev/docs/transforms#transform) property
 
 Please if you detect undetermined behavior open a [issue](https://github.com/Orivoir/css-parser/issues)
