@@ -25,7 +25,7 @@ now you can convert **css files** to **javascript object**.
 
 ## installation
 
-Only local install is support.
+Can local or global install this package
 
 ```bash
 > npm install --save-dev react-native-style-parser
@@ -35,6 +35,12 @@ or with yarn
 
 ```bash
 > yard add react-native-style-parser -D
+```
+
+or global
+
+```bash
+> npm install --global react-native-style-parser
 ```
 
 ## config

@@ -205,6 +205,3 @@ describe('class: "./.bin/lib/args.js"', () => {
   } );
 
 } );
-
-
-// - **Finish** Unit test for: ./test/args.test.js *(should coverage methods: getOptionsByPattern, isExistsOption )*
