@@ -5,6 +5,7 @@ const CssUnminifier = require('./unminifier');
 const CssSepareBlock = require('./separe-block');
 const CssAnnotations = require('./annotations');
 const CssComposer = require('./composer');
+const dash2camel = require('./../dash2camel');
 
 /**
  * transform css file to Javascript object
@@ -237,43 +238,6 @@ class CssFileParser {
 
   }
 
-  /*
-   * this method is generic to convert dash value to string value
-   * this method should be export to a Utils class or a module fonction
-   *
-   *  @see ./.bin/lib/resolve-config.js
-   */
-  static transformPropertyName( propertyName ) {
-
-    if( propertyName.indexOf('-') === -1 ) return propertyName;
-
-    let copy = '';
-
-    let isFired = false;
-
-    for( let i = 0, size= propertyName.length; i < size; i++ ) {
-
-      if( propertyName[ i ] === "-" ) {
-
-        isFired = true;
-
-      } else {
-
-        if( isFired ) {
-
-          copy += propertyName[i].toLocaleUpperCase();
-
-          isFired = false;
-        } else {
-
-          copy += propertyName[i];
-        }
-      }
-    }
-
-    return copy;
-  }
-
   static parseBody( body ) {
 
     body = body.replace('{', '');
@@ -287,7 +251,7 @@ class CssFileParser {
     ) )
     .map( instruction => (
       {
-        property: CssFileParser.transformPropertyName(instruction[0].trim()),
+        property: dash2camel(instruction[0].trim()),
         value: instruction[1].replace(';','').trim()
       }
     ) ).filter( cssValue => (
