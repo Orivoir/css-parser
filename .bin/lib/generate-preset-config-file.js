@@ -1,13 +1,13 @@
-const fs = require('fs');
 const pathResolver = require('path');
 
-const jsonWriting = require('./fs-json-writing');
+const jsonWriting = require('fs-json-writer');
 
 module.exports = function() {
 
   const filename = "react-native-style-parser.config.js";
 
   jsonWriting({
+
     state: {
       entry: "./styles/css",
       output: "./styles/react",
@@ -17,11 +17,11 @@ module.exports = function() {
         watch: true,
         optimize: false,
       }
-
     },
     path: pathResolver.join( process.cwd(), filename ),
+
     isEs6: true,
-    isOptimize: false
+    isNoQuote: true
   });
 
 };
