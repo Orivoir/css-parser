@@ -65,7 +65,9 @@ describe('class: "./.bin/lib/args.js"', () => {
 
     factoryArgvNotHydrate.forEach( fakeArg => {
 
-      it('should not exists', () => {
+      const message = `should not exists argument: ${fakeArg} `
+
+      it( message, () => {
 
         assert.isFalse( !!handlerArgs.isExistsArg( fakeArg ) );
 
@@ -77,19 +79,33 @@ describe('class: "./.bin/lib/args.js"', () => {
 
   describe('is exists argument by pattern', () => {
 
+    before( () => {
+
+      // push random argv
+      process.__DEFAULT_ARGV__ = process.argv;
+
+      // remove default system paths inside argv
+      // because else should parsed regex builded from string
+      process.argv = factoryArgvHydrate;
+
+    } );
+
+    after( () => {
+      process.argv = process.__DEFAULT_ARGV__;
+      delete process.__DEFAULT_ARGV__;
+    } );
+
     const handlerArgs = new CliArg({
       preNormalize: argv => argv
     });
 
-    // remove default system paths inside argv
-    // because else should parsed regex builded from string
-    process.argv.slice( 2, ).forEach( realArg => {
+    factoryArgvHydrate.forEach( realArg => {
 
-      const message = `should exists argument: "${realArg}"`;
+      realArg = new RegExp( `^${realArg}$`);
+      const message = `should exists argument: ${realArg.source}`;
 
       it( message, () => {
 
-        realArg = new RegExp( `^${realArg}$`);
 
         assert.isTrue( !!handlerArgs.isExistsArgByPattern( realArg ) );
 
@@ -99,9 +115,11 @@ describe('class: "./.bin/lib/args.js"', () => {
 
     factoryArgvNotHydrate.forEach( fakeArg => {
 
-      it('should not exists', () => {
+      fakeArg = new RegExp( `^${fakeArg}$`);
+      const message = `should not exists: ${fakeArg.source}`;
 
-        fakeArg = new RegExp( `^${fakeArg}$`);
+      it(message, () => {
+
 
         assert.isFalse( !!handlerArgs.isExistsArgByPattern( fakeArg ) );
 
