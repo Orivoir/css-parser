@@ -13,19 +13,27 @@ const
   onParseFile = require('./lib/onParse'),
   createWatcherParse = require('./lib/onWatchParse'),
   prettyLogs = require('./lib/logs'),
-
-  ConfigResolver = require('./lib/resolve-config'),
-  config = new ConfigResolver( handlerArg )
+  generatorConfigFile = require('./lib/generate-preset-config-file')
 ;
-
-global.options = config.options;
-global.paths = config.paths;
 
 if( handlerArg.isExistsArg('version') || handlerArg.isExistsOption('version') ) {
 
   prettyLogs.info('version: ' + _pkg.version );
 	process.exit();
 }
+
+if( handlerArg.isExistsArg('init') ) {
+
+  generatorConfigFile();
+
+  process.exit();
+}
+
+const ConfigResolver = require('./lib/resolve-config');
+const config = new ConfigResolver( handlerArg );
+
+global.options = config.options;
+global.paths = config.paths;
 
 global.prettyLogs = prettyLogs;
 

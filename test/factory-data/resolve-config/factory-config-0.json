@@ -1,0 +1,10 @@
+{
+  "entry": "./test/factory-data/resolve-config/factory-entry-0",
+  "output": "./test/factory-data/resolve-config/dist",
+
+  "options": {
+    "es6": true,
+    "no-quote": true
+  }
+
+}

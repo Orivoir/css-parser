@@ -1,4 +1,4 @@
-module.exports = ({excludeValue}) => {
+module.exports = ({excludeValue,withOptions = false}) => {
 
   // words inside line should be uniq by line
   const values = [
@@ -23,6 +23,11 @@ module.exports = ({excludeValue}) => {
 
   const hydrate = values[ indexValue ];
 
-  return [hydrate, indexValue];
+  return [
+    !withOptions ?
+    hydrate:
+    hydrate.map( arg => "--" + arg ),
+    indexValue
+  ];
 
 };
