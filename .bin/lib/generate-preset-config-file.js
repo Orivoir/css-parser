@@ -24,4 +24,8 @@ module.exports = function() {
     isNoQuote: true
   });
 
+  global.prettyLogs.success(`Added config file: ./${filename}\n`);
+  global.prettyLogs.info(`Add key script from package.json: react-native-style-parser ./${filename}\n`);
+
+  // @TODO log anchor link to documention *config from file*
 };
