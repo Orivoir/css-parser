@@ -32,7 +32,8 @@
   "license": "BSD-2-CLAUSE",
   "dependencies": {
     "chalk": "^4.1.0",
-    "chokidar": "^3.4.2"
+    "chokidar": "^3.4.2",
+    "fs-json-writer": "^1.0.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",

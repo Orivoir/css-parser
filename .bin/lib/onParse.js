@@ -7,7 +7,7 @@ module.exports = function( filename ) {
   const createStylesheet = new CssFileParser( filename );
 
   const pathWrite = pathResolver.join(
-    global.pathOutput,
+    global.paths.output,
     pathResolver.basename(filename).replace( 'css', 'js' )
   );
 
