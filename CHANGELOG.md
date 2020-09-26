@@ -18,5 +18,7 @@
 ## 0.6.1
 
 **Added** config from file [see](https://github.com/Orivoir/css-parser/commit/7ab55550f0312765f3f2552a3045098197dfc4bc)
+
 **Added** command **init** generate preset config file [see](https://github.com/Orivoir/css-parser/commit/0935eccc322a4695917c0c98f5af2f878f238a31)
+
 **Optimize** export module fs json write as standalone package [fs-json-writer](https://www.npmjs.com/package/fs-json-writer) [see](https://github.com/Orivoir/css-parser/commit/ba48cf07352c714d2d31e767e504d64cf12865f4)
