@@ -12,7 +12,7 @@ now you can convert **css files** to **javascript object**.
 - [installation](#installation)
 
 - [config](#config)
-
+  - [file](#file)
 - [usage](#usage)
   - [single file](#single-file)
   - [directory](#directory)
@@ -61,7 +61,49 @@ For check access to command try show version with **--version** option
 > npm run build-style -- --version
 ```
 
-# usage
+### file
+
+Can config from **JS** or **JSON** file at root
+
+```js
+module.exports = {
+
+  // path to css files
+  entry: "./styles/css/",
+
+  // path to generate output js file
+  output: "./styles/react/",
+
+  options: {
+
+    isEs6: true,
+    isNoQuote: true,
+    isWatch: true,
+    isOptimize: false
+  }
+
+};
+```
+
+more informations on [options](https://www.npmjs.com/package/react-native-style-parser#options)
+
+run from config file with
+
+```json
+{
+  "scripts": {
+    "build-style": "react-native-style-parser ./config-file-name.js"
+  }
+}
+```
+
+Can generate a preset config file at root with
+
+```bash
+> react-native-style-parser init
+```
+
+## usage
 
 Usage of command line interface is easy and fast,
 **react-native-style-parser** convert `class` selectors from css files.
