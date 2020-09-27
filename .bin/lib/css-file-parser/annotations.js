@@ -36,8 +36,16 @@ class CssAnnotations {
   static read( bodyCss ) {
 
     const ra = new ReaderAnnotations(
+
       bodyCss.split('\n'),
-      "css file"
+
+      // should be class name from read annotations
+      "css file",
+
+      // not conserve excludes comments
+      // because normalize annotations
+      // cannot diff key of real annotations and excludes annotations
+      false
     );
 
     return ra;
@@ -50,7 +58,7 @@ class CssAnnotations {
 
   static get COMPOSE() {
 
-    return "CssParser/Compose"
+    return "CssParser/Compose";
   }
 
   static has() {

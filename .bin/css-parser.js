@@ -16,6 +16,8 @@ const
   generatorConfigFile = require('./lib/generate-preset-config-file')
 ;
 
+global.prettyLogs = prettyLogs;
+
 if( handlerArg.isExistsArg('version') || handlerArg.isExistsOption('version') ) {
 
   prettyLogs.info('version: ' + _pkg.version );
@@ -34,8 +36,6 @@ const config = new ConfigResolver( handlerArg );
 
 global.options = config.options;
 global.paths = config.paths;
-
-global.prettyLogs = prettyLogs;
 
 const isExistsEntry = fs.existsSync( config.paths.entry );
 

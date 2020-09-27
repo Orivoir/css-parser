@@ -4,15 +4,15 @@
 
 > Command line interface transform css files to javascript object
 
-You want create a app [react-native](https://reactnative.dev/) but write you style inside **javascript object** is not you enjoy
-now you can convert **css files** to **javascript object**.
+You want create a app [react-native](https://reactnative.dev/) but write you style inside **javascript object** is not you enjoy ?
+Now you can convert **css files** to **javascript object**.
 
 ![react-native-style-parser](./demo.png "Sample")
 
 - [installation](#installation)
 
 - [config](#config)
-
+  - [file](#file)
 - [usage](#usage)
   - [single file](#single-file)
   - [directory](#directory)
@@ -21,6 +21,9 @@ now you can convert **css files** to **javascript object**.
     - [es6](#es6)
     - [no-quote](#no-quote)
     - [optimize](#optimize)
+  - [annotations](#annotations)
+    - [ignore](#ignore)
+    - [compose](#compose)
 - [other](#other)
 
 ## installation
@@ -61,58 +64,57 @@ For check access to command try show version with **--version** option
 > npm run build-style -- --version
 ```
 
-# usage
+### file
 
-Usage of command line interface is easy and fast,
-**react-native-style-parser** convert `class` selectors from css files.
+Can config from **JS** or **JSON** file at root
 
-Only class selectors is transform,
-but you can ignore a specific `class` selector with
-a annotation inside body style.
+```js
+module.exports = {
 
-*e.g*
+  // path to css files
+  entry: "./styles/css/",
 
-foobar.css
-```css
+  // path to generate output js file
+  output: "./styles/react/",
 
-.container {
+  options: {
 
-  flex: 1;
-  margin: 3px 5px;
-  z-index: 3;
-}
+    isEs6: true,
+    isNoQuote: true,
+    isWatch: true,
+    isOptimize: false
+  }
 
-.style-for-my-web-view {
-  /**
-  * @CssParser/Ignore
-  */
-  width: 65%;
-  margin: auto;
-}
+};
 ```
 
-foobar.js
-```js
-export default {
+more informations on [options](https://www.npmjs.com/package/react-native-style-parser#options)
 
-  "container": {
-    flex: 1,
-    marginTop: 3,
-    marginBottom: 3,
-    marginLeft: 5,
-    marginRight: 5,
-    zIndex: 3
+run from config file with
+
+```json
+{
+  "scripts": {
+    "build-style": "react-native-style-parser ./config-file-name.js"
   }
 }
 ```
 
-Any block styles can be ignore with annotation: **@CssParser/Ignore**
+Can generate a preset config file at root with
 
+```bash
+> react-native-style-parser init
+```
+
+## usage
+
+Usage of command line interface is easy and fast,
+**react-native-style-parser** convert `class` selectors from css files.
 
 ### single file
 
 Transform a single file with **command line interface**
-with **relative path** of **css file**.
+from **relative path** of **css file**.
 
 ```bash
 > npm run build-style -- ./css/foobar.css to ./react-styles/
@@ -170,6 +172,93 @@ use before switch prod env.
 > npm run build-style -- ./css/ to ./react-styles/ --optimize
 ```
 
+### annotations
+
+Add behavior from pretty annotations
+
+#### ignore
+
+Skip specific css block
+
+```css
+
+.container {
+
+  flex: 1;
+  margin: 3px 5px;
+  z-index: 3;
+}
+
+.container-web-view {
+  /**
+  * @CssParser/Ignore()
+  */
+  width: 65%;
+  margin: auto;
+}
+```
+
+```js
+export default {
+
+  "container": {
+    flex: 1,
+    marginTop: 3,
+    marginBottom: 3,
+    marginLeft: 5,
+    marginRight: 5,
+    zIndex: 3
+  }
+}
+```
+
+#### compose
+
+Annotations **compose** is a approach of [react-native compose](https://reactnative.dev/docs/stylesheet#compose)
+
+```css
+
+.text {
+
+  color: rgb( 42,42,42 );
+}
+
+.title {
+  font-size: 25px;
+  letter-spacing: 9px;
+}
+
+.super-text {
+  /**
+  * @CssParser/Compose( "text", "title" )
+  */
+
+  cursor: pointer;
+}
+
+
+```
+
+```js
+export default {
+  "text": {
+    color: "rgb( 42,42,42 )"
+  },
+
+  "title": {
+    fontSize: 25,
+    letterSpacing: 9
+  },
+
+  "super-text": {
+    color: "rgb( 42,42,42 )",
+    fontSize: 25,
+    letterSpacing: 9,
+    cursor: pointer
+  }
+}
+```
+
 ### other
 
 For not use *double dash option (--)* , prepare command from **package.json**
@@ -180,8 +269,5 @@ For not use *double dash option (--)* , prepare command from **package.json**
   "build-style-prod": "react-native-style-parser ./css to ./react-styles/ --es6 --no-quote --optimize"
 }
 ```
-
-
-> The next minor version will add support for parsing [transform](https://reactnative.dev/docs/transforms#transform) property
 
 Please if you detect undetermined behavior open a [issue](https://github.com/Orivoir/css-parser/issues)

@@ -1,74 +1,39 @@
 const fs = require('fs');
 
-function persistDataType( value ) {
-
-  if( typeof value === "string" ) {
-
-    return "'"+value+"'";
-  } else {
-
-    return value;
-  }
-}
-
-function styleWriteProperty( propertyName, isNoQuote ) {
-
-  if( isNoQuote ) {
-
-    return propertyName;
-  } else {
-
-    return "'"+propertyName+"'";
-  }
-
-}
+const jsonWriter = require('fs-json-writer');
 
 module.exports = function( {
   styles,
   path,
   isEs6,
-  isOptimize,
-  isNoQuote
+  isNoQuote,
+
+  isOptimize
 } ) {
 
-  const exportType = isEs6 ? "export default": "module.exports =";
+  jsonWriter({
+    state: styles,
+    path,
+    isEs6,
+    isNoQuote,
+    isOptimize
+  });
 
-  let append = `${exportType} {\n`;
-
-  Object.keys( styles ).forEach( selector => {
-
-    append += "\t'" + selector  + "'" + ": {\n";
-
-    Object.keys( styles[selector] ).forEach(propertyName => {
-
-      append += `\t\t${styleWriteProperty( propertyName, isNoQuote )}: ${persistDataType(styles[selector][propertyName])},\n`;
-
-    });
-
-    append += "\t},\n";
-
-  } );
-
-  append += "};\n";
-
+  // json writer do not support is optimize flag
+  // because generate human content readable
   if( isOptimize ) {
 
-    while( append.indexOf('\n') !== -1 ) {
+    let state = require( path );
 
-      append = append.replace('\n','');
-    }
+    // minified json content
+    state = JSON.stringify( state );
 
-    while( append.indexOf('\t') !== -1 ) {
-      append = append.replace('\t','');
-    }
-  }
-
-  fs.writeFileSync(
-    path,
-    append,
-    {
+    state = "module.exports="+state;
+    // re write content
+    fs.writeFileSync( path, state, {
       encoding: "utf-8"
-    }
-  );
+    } );
+
+  }
 
 };

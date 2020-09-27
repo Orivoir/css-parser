@@ -24,4 +24,8 @@ module.exports = function() {
     isNoQuote: true
   });
 
+  global.prettyLogs.success(`Added config file: ./${filename}\n`);
+  global.prettyLogs.info(`Add key script from package.json: react-native-style-parser ./${filename}\n`);
+
+  global.prettyLogs.info(`More infos on config from file: https://www.npmjs.com/package/react-native-style-parser#file`);
 };
