@@ -1,0 +1,54 @@
+[
+  {
+    "entry": {
+      "styles": {
+        "title": {
+          "color": "red",
+          "fontSize": 25
+        }
+      },
+      "path": "./foobar.js",
+      "isNoQuote": true
+    }
+  },
+  {
+    "entry": {
+      "styles": {
+        "a": {
+          "color": "red",
+          "fontSize": 25
+        },
+        "b": {
+          "zIndex": 4,
+          "fontSize": 25
+        },
+        "c": {
+          "zIndex": 4,
+          "fontSize": 25
+        }
+      },
+      "path": "./foobar-1.js",
+      "isNoQuote": true,
+      "isOptimize": true
+    }
+  },
+  {
+    "entry": {
+      "styles": {
+        "a": {
+          "color": "red",
+          "fontSize": 25
+        },
+        "b": {
+          "zIndex": 4,
+          "fontSize": 25
+        },
+        "c": {
+          "zIndex": 4,
+          "fontSize": 25
+        }
+      },
+      "path": "./foobar-2.js"
+    }
+  }
+]

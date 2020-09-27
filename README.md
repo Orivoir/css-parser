@@ -114,7 +114,7 @@ Usage of command line interface is easy and fast,
 ### single file
 
 Transform a single file with **command line interface**
-with **relative path** of **css file**.
+from **relative path** of **css file**.
 
 ```bash
 > npm run build-style -- ./css/foobar.css to ./react-styles/
