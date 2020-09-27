@@ -5,6 +5,8 @@ const CssUnminifier = require('./unminifier');
 const CssSepareBlock = require('./separe-block');
 const CssAnnotations = require('./annotations');
 const CssComposer = require('./composer');
+const CssLoadValue = require('./load-value');
+
 const dash2camel = require('./../dash2camel');
 
 /**
@@ -57,6 +59,20 @@ class CssFileParser {
 
   }
 
+  static get propertiesToLoad() {
+
+    return [
+      "transform",
+      "filter"
+    ];
+
+  }
+
+  static isLoadProperty( propertyName ) {
+
+    return CssFileParser.propertiesToLoad.includes( propertyName );
+  }
+
   static get PATTERN_IS_PX_VALUE() {
 
     return /^[\d]{1,}(\.)?[\d]{0,}px/;
@@ -100,7 +116,6 @@ class CssFileParser {
   write( property, value ) {
 
     this.stylesheet[ this.selector ][ property ] = CssFileParser.transformValue(value);
-
   }
 
   constructor( path ) {
@@ -225,9 +240,17 @@ class CssFileParser {
 
           } );
 
-        } else {
+        }
+        // if value of current property should be load
+        else if( CssFileParser.isLoadProperty( propertyName ) ) {
 
-          this.write( this.body[cssValue].property, this.body[cssValue].value );
+          const valueLoaded = new CssLoadValue( this.body[cssValue].value ).getLoaded();
+          this.write( propertyName, valueLoaded );
+
+        }
+        else {
+
+          this.write( propertyName, this.body[cssValue].value );
         }
 
       } );
