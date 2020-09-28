@@ -1,1 +1,1 @@
-module.exports={"a":{"color":"red","fontSize":25},"b":{"zIndex":4,"fontSize":25},"c":{"zIndex":4,"fontSize":25}}
+module.exports={"a":{"color":"red","fontSize":25},"b":{"zIndex":4,"fontSize":25},"c":{"zIndex":4,"fontSize":25},"d":{"e":[{"a":[1,2,3],"b":{"c":42}}]}}

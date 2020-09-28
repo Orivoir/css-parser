@@ -33,7 +33,7 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2",
-    "fs-json-writer": "^1.0.1"
+    "fs-json-writer": "^0.9.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",

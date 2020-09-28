@@ -1,14 +1,14 @@
 module.exports = {
-	"a":  {
+	"a": {
 		"color": "red",
 		"fontSize": 25
 	},
-	"b":  {
+	"b": {
 		"zIndex": 4,
 		"fontSize": 25
 	},
-	"c":  {
+	"c": {
 		"zIndex": 4,
 		"fontSize": 25
-	},
+	}
 }

@@ -1,6 +1,6 @@
 module.exports = {
-	title:  {
-		color: "red",
-		fontSize: 25
-	},
+	"title": {
+		"color": "red",
+		"fontSize": 25
+	}
 }
