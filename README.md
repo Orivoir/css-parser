@@ -189,6 +189,11 @@ Skip specific css block
   z-index: 3;
 }
 
+.item {
+
+  transform: rotate( 8deg ), translateX( -10px );
+}
+
 .container-web-view {
   /**
   * @CssParser/Ignore()
@@ -208,6 +213,16 @@ export default {
     marginLeft: 5,
     marginRight: 5,
     zIndex: 3
+  },
+
+  "item": {
+    transform: [
+      {
+        rotate: "8deg"
+      }, {
+        translateX: -10
+      }
+    ]
   }
 }
 ```
